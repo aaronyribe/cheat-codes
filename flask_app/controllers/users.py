@@ -46,7 +46,7 @@ def dashboard():
     data ={
         'id': session['user_id'],
     }
-    return render_template("dashboard.html",user=User.get_by_id(data),  ) # TODO what should be shown on the dashboard??? shows=Show.get_all(),)
+    return render_template("dashboard.html",user=User.get_by_id(data), games=Game.get_by_user_id(data) ) # TODO what should be shown on the dashboard??? shows=Show.get_all(),)
 
 @app.route('/logout')
 def logout():
@@ -63,6 +63,7 @@ def create_game():
             "title": request.form['title'],
             "release_year": request.form['release_year'],
         }
+        breakpoint()
         game = Game.save(data)
         return redirect('/dashboard')
     return render_template("create_game.html")
@@ -98,3 +99,7 @@ def display_game(id):
 def delete_game(id):
     game = Game.delete_by_id({'id': id})
     return redirect('/dashboard')
+
+
+
+

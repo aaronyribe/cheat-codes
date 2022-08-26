@@ -21,13 +21,15 @@
             </tr>
         </thead>
         <tbody>
+            {% if games %}
             {% for game in games %}
             <tr>
-                <td>{{ games.title }}</td>
-                <td>{{ game.release_year }}</td>
+                <td>{{ game.title }} ({{ game.release_year }})</td>
+                <td>3 out of 22</td>
                 <td><a href="/display_game/{{game.id}}">game </a>{% if game.posted_by == user.id %}<a href="/edit_game/{{game.id}}">edit</a> <a href="/delete_game/{{game.id}}">delete</a>{% endif %}</td>
             </tr>
             {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 </body>

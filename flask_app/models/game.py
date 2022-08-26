@@ -30,6 +30,17 @@ class Game:
         return games
 
     @classmethod
+    def get_by_user_id(cls,data):
+        query = "SELECT * FROM cheat_code_schema.games AS g JOIN cheat_code_schema.cheat_codes AS c ON g.id=c.game_id JOIN cheat_code_schema.verified AS v ON c.id=v.cheat_code_id WHERE v.user_id=%(id)s;"
+        results = connectToMySQL(cls.db).query_db(query,data)
+        games = []
+        if not results:
+            return False
+        for row in results:
+            games.append( cls(row))
+        return games
+
+    @classmethod
     def get_by_title(cls,data):
         query = "SELECT * FROM cheat_code_schema.games WHERE title = %(title)s;"
         results = connectToMySQL(cls.db).query_db(query,data)

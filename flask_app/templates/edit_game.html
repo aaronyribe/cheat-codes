@@ -10,8 +10,8 @@
 <body>
     <div class="d-flex justify-content-around">
         <form action="{{ request.url }}" method="post" class="col-4 p-4 bg-dark text-light">
-            <h2 class="text-primary">Edit Show</h2>
-            {% with messages = get_flashed_messages(category_filter=['show']) %}
+            <h2 class="text-primary">Edit Game</h2>
+            {% with messages = get_flashed_messages(category_filter=['game']) %}
                 {% if messages %}
                 <div class="alert alert-danger" role="alert">
                     <strong>Flash AHHHHHHH!!!!</strong>
@@ -22,20 +22,12 @@
                 {% endif %}
             {% endwith %}
             <div class="form-group">
-                <label for="titel">Title:</label>
+                <label for="title">Title:</label>
                 <input type="text" name="title" class="form-control" value="{{ form['title'] }}">
             </div>
             <div class="form-group">
-                <label for="network">Network:</label>
-                <input type="text" name="network" class="form-control" value="{{ form['network'] }}">
-            </div>
-            <div class="form-group">
-                <label for="release_date">Release Date:</label>
-                <input type="date" name="release_date" class="form-control" value="{{ form['release_date'] }}">
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea name="description" class="form-control" rows="4" cols="50">{{ form['description'] }}</textarea>
+                <label for="release_year">Release Year:</label>
+                <input type="number" name="release_year" class="form-control" value="{{ form['release_year'] }}">
             </div>
             <input type="submit" value="update" class="btn btn-primary">
         </form>
