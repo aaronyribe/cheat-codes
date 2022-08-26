@@ -8,26 +8,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Howdy {{user.first_name}}!!!</h1>
-    <div class="text-right"><a href="/create_show" style="margin-right:20px">+ create</a>
+    <h1>Welcome {{user.first_name}}</h1>
+    <div class="text-right"><a href="/create_game" style="margin-right:20px">+ create</a>
     <a href="/logout">Logout</a></div>
-    <h3 style="margin-top:70px">All TV Shows</h3>
+    <h3 style="margin-top:70px">Games You've Played</h3>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Network</th>
-                <th scope="col">Release Date</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Games</th>
+                <th scope="col">Cheat Codes Tried</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-            {% for show in shows %}
+            {% for game in games %}
             <tr>
-                <td>{{ show.title }}</td>
-                <td>{{ show.network }}</td>
-                <td>{{ show.release_date }}</td>
-                <td><a href="/display_show/{{show.id}}">show </a>{% if show.posted_by == user.id %}<a href="/edit_show/{{show.id}}">edit</a> <a href="/delete_show/{{show.id}}">delete</a>{% endif %}</td>
+                <td>{{ games.title }}</td>
+                <td>{{ game.release_year }}</td>
+                <td><a href="/display_game/{{game.id}}">game </a>{% if game.posted_by == user.id %}<a href="/edit_game/{{game.id}}">edit</a> <a href="/delete_game/{{game.id}}">delete</a>{% endif %}</td>
             </tr>
             {% endfor %}
         </tbody>

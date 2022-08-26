@@ -54,55 +54,47 @@ def logout():
     return redirect('/')
 
 
-@app.route("/create_show", methods=['GET','POST'])
-def create_show():
+@app.route("/create_game", methods=['GET','POST'])
+def create_game():
     if request.method == "POST":
-        if not Show.validate_edit(request.form):
-            return redirect('/create_show')
+        if not Game.validate_edit(request.form):
+            return redirect('/create_game')
         data ={ 
             "title": request.form['title'],
-            "network": request.form['network'],
-            "release_date": request.form['release_date'],
-            "description": request.form['description'],
-            "posted_by": session['user_id'],
+            "release_year": request.form['release_year'],
         }
-        show = Show.save(data)
+        game = Game.save(data)
         return redirect('/dashboard')
-    return render_template("create_show.html")
+    return render_template("create_game.html")
 
-@app.route("/edit_show/<id>",methods=['GET','POST'])
-def edit_show(id):
+@app.route("/edit_game/<id>",methods=['GET','POST'])
+def edit_game(id):
     if request.method == "GET":
-        show = Show.get_by_id({'id': id})
+        game = Game.get_by_id({'id': id})
         form = { 
-            "title": show.title,
-            "network": show.network,
-            "release_date": show.release_date,
-            "description": show.description,
+            "title": request.form['title'],
+            "release_year": request.form['release_year'],
         }
     elif request.method == "POST":
-        if not Show.validate_edit(request.form):
-            return redirect(f'/edit_show{id}')
+        if not Game.validate_edit(request.form):
+            return redirect(f'/edit_game{id}')
         data ={ 
             "id": id,
             "title": request.form['title'],
-            "network": request.form['network'],
-            "release_date": request.form['release_date'],
-            "description": request.form['description'],
-            "posted_by": session['user_id'],
+            "release_year": request.form['release_year'],
         }
-        show = Show.update(data)
+        game = Game.update(data)
         return redirect('/dashboard')
-    return render_template("edit_show.html", form=form)
+    return render_template("edit_game.html", form=form)
 
 
-@app.route("/display_show/<id>")
-def display_show(id):
-    show = Show.get_by_id({'id': id})
-    user = User.get_by_id({'id': show.posted_by})
-    return render_template("display_show.html", show=show, posted_by=f'{user.first_name} {user.last_name}')
+@app.route("/display_game/<id>")
+def display_game(id):
+    game = Game.get_by_id({'id': id})
+    user = User.get_by_id({'id': game.posted_by})
+    return render_template("display_game.html", game=game, posted_by=f'{user.first_name} {user.last_name}')
 
-@app.route("/delete_show/<id>")
-def delete_show(id):
-    show = Show.delete_by_id({'id': id})
+@app.route("/delete_game/<id>")
+def delete_game(id):
+    game = Game.delete_by_id({'id': id})
     return redirect('/dashboard')
