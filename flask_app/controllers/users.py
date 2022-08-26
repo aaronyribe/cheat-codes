@@ -19,7 +19,7 @@ def register():
         "first_name": request.form['first_name'],
         "last_name": request.form['last_name'],
         "email": request.form['email'],
-        "pw_hash": bcrypt.generate_password_hash(request.form['pw_hash'])
+        "password": bcrypt.generate_password_hash(request.form['password'])
     }
     id = User.save(data)
     session['user_id'] = id
@@ -33,7 +33,7 @@ def login():
     if not user:
         flash("Invalid Email","login")
         return redirect('/')
-    if not bcrypt.check_password_hash(user.pw_hash, request.form['pw_hash']):
+    if not bcrypt.check_password_hash(user.password, request.form['password']):
         flash("Invalid Password","login")
         return redirect('/')
     session['user_id'] = user.id

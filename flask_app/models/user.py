@@ -11,13 +11,13 @@ class User:
         self.first_name = data['first_name']
         self.last_name = data['last_name']
         self.email = data['email']
-        self.pw_hash = data['pw_hash']
+        self.password = data['password']
         # self.created_at = data['created_at']
         # self.updated_at = data['updated_at']
 
     @classmethod
     def save(cls,data):
-        query = "INSERT INTO cheat_code_schema.users (first_name,last_name,email,pw_hash) VALUES(%(first_name)s,%(last_name)s,%(email)s,%(pw_hash)s)"
+        query = "INSERT INTO cheat_code_schema.users (first_name,last_name,email,password) VALUES(%(first_name)s,%(last_name)s,%(email)s,%(password)s)"
         return connectToMySQL(cls.db).query_db(query,data)
 
     @classmethod
@@ -60,9 +60,9 @@ class User:
         if len(user['last_name']) < 3:
             flash("Last name must be at least 3 characters","register")
             is_valid= False
-        if len(user['pw_hash']) < 8:
-            flash("pw_hash must be at least 8 characters","register")
+        if len(user['password']) < 8:
+            flash("password must be at least 8 characters","register")
             is_valid= False
-        if user['pw_hash'] != user['confirm']:
-            flash("pw_hashs don't match","register")
+        if user['password'] != user['confirm']:
+            flash("passwords don't match","register")
         return is_valid
