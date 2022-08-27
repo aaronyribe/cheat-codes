@@ -125,3 +125,27 @@ def delete_game(id):
     game = Game.delete_by_id({'id': id})
     return redirect('/dashboard')
 
+
+@app.route("/create_cheat/<game_id>", methods=['GET','POST'])
+def create_cheat(game_id):
+    if request.method == "POST":
+        if not CheatCode.validate_edit(request.form):
+            return redirect('/create_cheat')
+        data ={ 
+            "description": request.form['description'],
+            "game_id": game_id,
+            "submitted_by": session['user_id'],
+        }
+        cheat_code = CheatCode.save(data)
+        return redirect(f"/show_cheats/{game_id}")
+    return render_template("create_cheat.html")
+
+
+@app.route("/show_cheats/<game_id>")
+def show_cheats(game_id):
+    game = Game.get_by_id({'id': game_id})
+    cheat_codes = CheatCode.get_by_game_id({'game_id': game_id})
+    user = User.get_by_id({'id': game.posted_by})
+    return render_template("show_cheats.html", user=user, game=game, cheat_codes=cheat_codes)
+
+

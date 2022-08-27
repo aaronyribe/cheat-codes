@@ -29,14 +29,6 @@ class CheatCode:
             cheat_codes.append( cls(row) )
         return cheat_codes
 
-    # @classmethod # TODO This is hard, since we need to check the M2M through the verified table!
-    # def get_by_game_id_and_user(cls,data):
-    #     query = "SELECT * FROM cheat_code_schema.cheat_codes WHERE user_id = %(user_id)s;"
-    #     results = connectToMySQL(cls.db).query_db(query,data)
-    #     if len(results) < 1:
-    #         return False
-    #     return [ cls(r) for r in results ]
-
     @classmethod
     def get_by_game_id(cls,data):
         query = "SELECT * FROM cheat_code_schema.cheat_codes WHERE game_id = %(game_id)s;"
@@ -62,13 +54,7 @@ class CheatCode:
     @staticmethod
     def validate_edit(cheat_code):
         is_valid = True
-        if len(cheat_code['description']) < 3:
-            flash("Description must be at least 3 characters", "cheat_code")
-            is_valid= False
-        if len(cheat_code['game_id']) < 3:
-            flash("Game ID must be at least 3 characters", "cheat_code")
-            is_valid= False
-        if len(cheat_code['submitted_by']) < 3: # TODO not part of the form, should be generated automatically by the back end
-            flash("Submitted_by must be at least 3 characters", "cheat_code")
+        if len(cheat_code['description']) < 10:
+            flash("Description must be at least 10 characters", "cheat_code")
             is_valid= False
         return is_valid

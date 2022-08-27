@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Welcome {{user.first_name}}</h1>
+    <div class="text-right"><a href="/logout">Logout</a></div>
+    <h3 style="margin-top:70px">Cheat Codes for {{ game.title }}</h3>
+
+		{% if cheat_codes %}
+			{% for cheat_code in cheat_codes %}
+			<div style= "border:solid 2px blue;margin:50px;padding:10px">
+				<div style="border:solid 1px grey;margin:20px; padding:20px;">
+					{{ cheat_code.description }}
+					{% if cheat_code.submitted_by == user.id %}
+						<a href="">edit</a> | <a href="">delete</a>
+					{% endif %}
+				</div>
+				<p>Works for you? <a href="">yes</a> <a href="">no</a></p>
+				<p>Verified score = +343</p>
+			</div>
+			{% endfor %}
+		{% else %}
+			<p>There are no cheat codes submitted for this game yet</p>
+		{% endif %}
+		<a href="/create_cheat/{{game.id}}" style="margin-right:20px">+ add new cheat code</a>
+</body>
+</html>
+
