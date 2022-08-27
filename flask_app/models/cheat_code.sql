@@ -35,7 +35,14 @@ CREATE TABLE IF NOT EXISTS `cheat_code_schema`.`games` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
   `release_year` YEAR(4) NULL,
-  PRIMARY KEY (`id`))
+  `posted_by` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_games_users1_idx` (`posted_by` ASC) VISIBLE,
+  CONSTRAINT `fk_games_users1`
+    FOREIGN KEY (`posted_by`)
+    REFERENCES `cheat_code_schema`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -82,6 +89,29 @@ CREATE TABLE IF NOT EXISTS `cheat_code_schema`.`verified` (
   CONSTRAINT `fk_verified_users1`
     FOREIGN KEY (`user_id`)
     REFERENCES `cheat_code_schema`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cheat_code_schema`.`games_played`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cheat_code_schema`.`games_played` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `game_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_games_played_users1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_games_played_games1_idx` (`game_id` ASC) VISIBLE,
+  CONSTRAINT `fk_games_played_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `cheat_code_schema`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_games_played_games1`
+    FOREIGN KEY (`game_id`)
+    REFERENCES `cheat_code_schema`.`games` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

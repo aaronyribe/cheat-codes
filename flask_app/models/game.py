@@ -8,7 +8,7 @@ class Game:
         self.id = data['id']
         self.title = data['title']
         self.release_year = data['release_year']
-
+        self.posted_by = data['posted_by']
 
     @classmethod
     def update(cls,data):
@@ -17,7 +17,7 @@ class Game:
 
     @classmethod
     def save(cls,data):
-        query = "INSERT INTO cheat_code_schema.games (title,release_year) VALUES(%(title)s,%(release_year)s)"
+        query = "INSERT INTO cheat_code_schema.games (title,release_year,posted_by) VALUES(%(title)s,%(release_year)s,%(posted_by)s)"
         return connectToMySQL(cls.db).query_db(query,data)
 
     @classmethod
@@ -30,8 +30,18 @@ class Game:
         return games
 
     @classmethod
+    def play(cls,data):
+        query = "INSERT INTO cheat_code_schema.games_played (user_id,game_id) VALUES(%(user_id)s,%(game_id)s);"
+        return connectToMySQL(cls.db).query_db(query,data)
+
+    @classmethod
+    def unplay(cls,data):
+        query = "DELETE FROM cheat_code_schema.games_played WHERE user_id=%(user_id)s AND game_id=%(game_id)s;"
+        return connectToMySQL(cls.db).query_db(query,data)
+
+    @classmethod
     def get_by_user_id(cls,data):
-        query = "SELECT * FROM cheat_code_schema.games AS g JOIN cheat_code_schema.cheat_codes AS c ON g.id=c.game_id JOIN cheat_code_schema.verified AS v ON c.id=v.cheat_code_id WHERE v.user_id=%(id)s;"
+        query = "SELECT * FROM cheat_code_schema.games AS games JOIN cheat_code_schema.games_played ON games.id=game_id WHERE user_id=%(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
         games = []
         if not results:
@@ -42,7 +52,7 @@ class Game:
 
     @classmethod
     def get_by_title(cls,data):
-        query = "SELECT * FROM cheat_code_schema.games WHERE title = %(title)s;"
+        query = "SELECT * FROM cheat_code_schema.games WHERE title = %(title)s;" # TODO Make this a fuzzy text search
         results = connectToMySQL(cls.db).query_db(query,data)
         if len(results) < 1:
             return False

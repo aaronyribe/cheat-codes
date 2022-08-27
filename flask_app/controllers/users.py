@@ -7,9 +7,11 @@ from flask_app.models.verified import Verified
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/register',methods=['POST'])
 def register():
@@ -26,6 +28,7 @@ def register():
 
     return redirect('/dashboard')
 
+
 @app.route('/login',methods=['POST'])
 def login():
     user = User.get_by_email(request.form)
@@ -39,6 +42,7 @@ def login():
     session['user_id'] = user.id
     return redirect('/dashboard')
 
+
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
@@ -46,12 +50,31 @@ def dashboard():
     data ={
         'id': session['user_id'],
     }
-    return render_template("dashboard.html",user=User.get_by_id(data), games=Game.get_by_user_id(data) ) # TODO what should be shown on the dashboard??? shows=Show.get_all(),)
+    return render_template("dashboard.html",user=User.get_by_id(data), games=Game.get_by_user_id(data) )
+
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
+
+
+@app.route("/play_game", methods=['GET','POST'])
+def play_game():
+    if request.method == "POST":
+        data ={ 
+            "user_id": session['user_id'],
+            "game_id": request.form['game_id'],
+        }
+        Game.play(data)
+        return redirect('/dashboard')
+    return render_template("play_game.html", games=Game.get_all())
+
+
+@app.route("/unplay_game/<game_id>")
+def unplay_game(id):
+    game = Game.unplay({'user_id': session['user_id'], 'game_id': game_id})
+    return redirect('/dashboard')
 
 
 @app.route("/create_game", methods=['GET','POST'])
@@ -62,19 +85,20 @@ def create_game():
         data ={ 
             "title": request.form['title'],
             "release_year": request.form['release_year'],
+            "posted_by": session['user_id'],
         }
-        breakpoint()
         game = Game.save(data)
-        return redirect('/dashboard')
+        return redirect('/play_game')
     return render_template("create_game.html")
+
 
 @app.route("/edit_game/<id>",methods=['GET','POST'])
 def edit_game(id):
     if request.method == "GET":
         game = Game.get_by_id({'id': id})
         form = { 
-            "title": request.form['title'],
-            "release_year": request.form['release_year'],
+            "title": game.title,
+            "release_year": game.release_year,
         }
     elif request.method == "POST":
         if not Game.validate_edit(request.form):
@@ -95,11 +119,9 @@ def display_game(id):
     user = User.get_by_id({'id': game.posted_by})
     return render_template("display_game.html", game=game, posted_by=f'{user.first_name} {user.last_name}')
 
+
 @app.route("/delete_game/<id>")
 def delete_game(id):
     game = Game.delete_by_id({'id': id})
     return redirect('/dashboard')
-
-
-
 
