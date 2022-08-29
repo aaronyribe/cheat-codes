@@ -75,7 +75,7 @@ class Game:
         if len(game['title']) < 3:
             flash("Title must be at least 3 characters", "game")
             is_valid= False
-        if len(game['release_year']) < 3: # TODO This might be an int
-            flash("release_year must be at least 3 characters", "game")
+        if len(game['release_year']) < 3:
+            flash("release_year must be at least 3 characters", "cheat_code")
             is_valid= False
         return is_valid

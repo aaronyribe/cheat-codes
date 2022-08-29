@@ -20,12 +20,12 @@
             </tr>
         </thead>
         <tbody>
-            {% if games %}
-            {% for game in games %}
+            {% if game_data %}
+            {% for id in game_data %}
             <tr>
-                <td>{{ game.title }} ({{ game.release_year }})</td>
-                <td><a href="/show_cheats/{{game.id}}">3 out of 22</a></td>
-                <td><a href="/display_game/{{game.id}}">show</a> | <a href="/unplay_game/{{game.id}}">unplay</a>{% if game.posted_by == user.id %} | <a href="/edit_game/{{game.id}}">edit</a> | <a href="/delete_game/{{game.id}}">delete from DB</a>{% endif %}</td>
+                <td>{{ game_data[id]['game'].title }} ({{ game_data[id]['game'].release_year }})</td>
+                <td><a href="/show_cheats/{{id}}">{{ game_data[id]['tried'] }} out of {{ game_data[id]['total_cheats'] }}</a></td>
+                <td><a href="/display_game/{{id}}">show</a> | <a href="/unplay_game/{{id}}">unplay</a>{% if game_data[id] == user.id %} | <a href="/edit_game/{{id}}">edit</a> | <a href="/delete_game/{{id}}">delete from DB</a>{% endif %}</td>
             </tr>
             {% endfor %}
             {% endif %}

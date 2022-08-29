@@ -26,16 +26,25 @@ class Verified:
         results = connectToMySQL(cls.db).query_db(query)
         verifieds = []
         for row in results:
-            verifieds.append( cls(row))
+            verifieds.append( cls(row) )
         return verifieds
 
     @classmethod
-    def get_by_cheat_code_id(cls,data): # TODO many-to-many relationship should return multiple rows from this query
+    def get_by_cheat_code_id(cls,data):
         query = "SELECT * FROM cheat_code_schema.verified WHERE cheat_code_id = %(cheat_code_id)s;"
+        results = connectToMySQL(cls.db).query_db(query,data)
+        verifieds = []
+        for row in results:
+            verifieds.append( cls(row) )
+        return verifieds
+
+    @classmethod
+    def get_by_cheat_code_id_user_id(cls,data):
+        query = "SELECT * FROM cheat_code_schema.verified WHERE cheat_code_id = %(cheat_code_id)s AND user_id = %(user_id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
         if len(results) < 1:
             return False
-        return cls(results[0])
+        return cls( results[0] )
 
     @classmethod
     def get_by_id(cls,data):
@@ -48,16 +57,16 @@ class Verified:
         query = "DELETE FROM cheat_code_schema.verified WHERE id = %(id)s;"
         connectToMySQL(cls.db).query_db(query,data)
 
-    @staticmethod
-    def validate_edit(verified):
-        is_valid = True
-        if len(verified['cheat_code_id']) < 3: # TODO this will probably fail with the wrong data type since the data should be an int not a string
-            flash("Title must be at least 3 characters", "verified")
-            is_valid= False
-        if len(verified['user_id']) < 3:
-            flash("Network must be at least 3 characters", "verified")
-            is_valid= False
-        if len(verified['verified']) < 3: # TODO supposed to be a boolean, but the database is saving it as a TINYINT, not sure what kind of data is coming in via HTML yet...
-            flash("Description must be at least 3 characters", "verified")
-            is_valid= False
-        return is_valid
+    # @staticmethod
+    # def validate_edit(verified): # This function is never used since it's not created from user data, but created in the controller
+    #     is_valid = True
+    #     if len(verified['cheat_code_id']) < 3:
+    #         flash("Title must be at least 3 characters", "cheat_code")
+    #         is_valid= False
+    #     if len(verified['user_id']) < 3:
+    #         flash("Network must be at least 3 characters", "cheat_code")
+    #         is_valid= False
+    #     if len(verified['verified']) < 3:
+    #         flash("Description must be at least 3 characters", "cheat_code")
+    #         is_valid= False
+    #     return is_valid

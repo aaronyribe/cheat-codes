@@ -12,7 +12,7 @@ class CheatCode:
 
     @classmethod
     def update(cls,data):
-        query = "UPDATE cheat_code_schema.cheat_codes SET description=%(description)s,game_id=%(game_id)s,submitted_by=%(submitted_by)s WHERE id=%(id)s;"
+        query = "UPDATE cheat_code_schema.cheat_codes SET description=%(description)s WHERE id=%(id)s;"
         return connectToMySQL(cls.db).query_db(query,data)
 
     @classmethod
@@ -48,7 +48,7 @@ class CheatCode:
 
     @classmethod
     def delete_by_id(cls,data):
-        query = "DELETE FROM cheat_code_schema.cheat_code WHERE id = %(id)s;"
+        query = "DELETE FROM cheat_code_schema.cheat_codes WHERE id = %(id)s;"
         connectToMySQL(cls.db).query_db(query,data)
 
     @staticmethod

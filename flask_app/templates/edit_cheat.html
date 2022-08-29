@@ -10,7 +10,7 @@
 <body>
     <div class="d-flex justify-content-around">
         <form action="{{ request.url }}" method="post" class="col-4 p-4 bg-dark text-light">
-            <h2 class="text-primary">Add Cheat Code for {{game.title}}</h2>
+            <h2 class="text-primary">Edit Cheat Code for {{game.title}}</h2>
             {% with messages = get_flashed_messages(category_filter=['cheat_code']) %}
                 {% if messages %}
                 <div class="alert alert-danger" role="alert">
@@ -23,8 +23,8 @@
             {% endwith %}
             <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea rows="8" cols="50" name="description" class="form-control"></textarea>
-            <input type="submit" value="add" class="btn btn-primary">
+                <textarea rows="8" cols="50" name="description" class="form-control">{{form['description']}}</textarea>
+            <input type="submit" value="update" class="btn btn-primary">
         </form>
         
     </div>
